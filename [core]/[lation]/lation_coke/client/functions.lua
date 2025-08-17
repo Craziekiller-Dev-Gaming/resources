@@ -9,7 +9,7 @@ local client = require 'config.client'
 local coke = exports.lation_coke
 
 -- You can change the textUI script here
--- Options: ox_lib, jg-textui, okokTextUI, qbcore & custom
+-- Options: 'lation_ui', 'ox_lib', 'jg-textui', 'okokTextUI', 'qbcore' & 'custom'
 local textui = 'ox_lib'
 
 -- Get dispatch
@@ -92,7 +92,9 @@ end
 --- @param message string
 --- @param type string
 function ShowNotification(message, type)
-    if shared.setup.notify == 'ox_lib' then
+    if shared.setup.notify == 'lation_ui' then
+        exports.lation_ui:notify({ message = message, type = type, icon = 'fas fa-leaf' })
+    elseif shared.setup.notify == 'ox_lib' then
         lib.notify({ description = message, type = type, position = 'top', icon = 'fas fa-leaf' })
     elseif shared.setup.notify == 'esx' then
         ESX.ShowNotification(message)
@@ -139,9 +141,16 @@ end
 --- @param text string 
 --- @param icon string
 function ShowTextUI(text, icon)
-    if textui == 'ox_lib' then
-        local displaying, _ = lib.isTextUIOpen()
-        if displaying then return end
+    if textui == 'lation_ui' then
+        local isOpen, _ = exports.lation_ui:isOpen()
+        if isOpen then return end
+        exports.lation_ui:showText({
+            description = text,
+            icon = icon
+        })
+    elseif textui == 'ox_lib' then
+        local isOpen, _ = lib.isTextUIOpen()
+        if isOpen then return end
         lib.showTextUI(text, {
             position = 'left-center',
             icon = icon
@@ -160,7 +169,12 @@ end
 -- Hide TextUI
 --- @param label string
 function HideTextUI(label)
-    if textui == 'ox_lib' then
+    if textui == 'lation_ui' then
+        local isOpen, text = exports.lation_ui:isOpen()
+        if isOpen and text == label then
+            exports.lation_ui:hideText()
+        end
+    elseif textui == 'ox_lib' then
         local isOpen, text = lib.isTextUIOpen()
         if isOpen and text == label then
             lib.hideTextUI()
@@ -177,9 +191,34 @@ function HideTextUI(label)
 end
 
 -- Display a progress bar
---- @param data table shared.Animations.X
+--- @param data table
 function ProgressBar(data)
-    if shared.setup.progress == 'ox_lib' then
+    if shared.setup.progress == 'lation_ui' then
+        if exports.lation_ui:progressBar({
+            label = data.label,
+            description = data.description or nil,
+            icon = data.icon or nil,
+            duration = data.duration,
+            useWhileDead = data.useWhileDead,
+            canCancel = data.canCancel,
+            steps = data.steps or nil,
+            disable = data.disable,
+            anim = {
+                dict = data.anim.dict or nil,
+                clip = data.anim.clip or nil,
+                flag = data.anim.flag or nil
+            },
+            prop = {
+                model = data.prop.model or nil,
+                bone = data.prop.bone or nil,
+                pos = data.prop.pos or nil,
+                rot = data.prop.rot or nil
+            }
+        }) then
+            return true
+        end
+        return false
+    elseif shared.setup.progress == 'ox_lib' then
         -- Want to use ox_lib's progress circle instead of bar?
         -- Change "progressBar" to "progressCircle" below & done!
         if lib.progressBar({
@@ -222,9 +261,11 @@ function ProgressBar(data)
             rotation = data.prop.rot or nil
         }, {},
         function()
+            ClearPedTasks(cache.ped)
             p:resolve(true)
         end,
         function()
+            ClearPedTasks(cache.ped)
             p:resolve(false)
         end)
         return Citizen.Await(p)
@@ -233,11 +274,69 @@ function ProgressBar(data)
     end
 end
 
+-- Register menu
+--- @param data table
+function RegisterMenu(data)
+    if shared.setup.menu == 'lation_ui' then
+        exports.lation_ui:registerMenu(data)
+    elseif shared.setup.menu == 'ox_lib' then
+        lib.registerContext(data)
+    elseif shared.setup.menu == 'custom' then
+        -- Add 'custom' menu system here
+    end
+end
+
+-- Show menu
+--- @param menuId string
+function ShowMenu(menuId)
+    if shared.setup.menu == 'lation_ui' then
+        exports.lation_ui:showMenu(menuId)
+    elseif shared.setup.menu == 'ox_lib' then
+        lib.showContext(menuId)
+    elseif shared.setup.menu == 'custom' then
+        -- Add 'custom' menu system here
+    end
+end
+
+-- Display an alert dialog
+--- @param data table
+function ShowAlert(data)
+    if shared.setup.dialogs == 'lation_ui' then
+        return exports.lation_ui:alert(data)
+    elseif shared.setup.dialogs == 'ox_lib' then
+        return lib.alertDialog(data)
+    elseif shared.setup.dialogs == 'custom' then
+        -- Add your custom alert dialog here
+    end
+end
+
+-- Display an input dialog
+--- @param data table
+function ShowInput(data)
+    if shared.setup.dialogs == 'lation_ui' then
+        return exports.lation_ui:input({ title = data.title, options = data.options })
+    elseif shared.setup.dialogs == 'ox_lib' then
+        return lib.inputDialog(data.title, data.options)
+    elseif shared.setup.dialogss == 'custom' then
+        -- Add your custom input dialog here
+    end
+end
+
 -- Display a skillcheck
 --- @param data table .difficulty, .inputs
 function Skillcheck(data)
-    if lib.skillCheck(data.difficulty, data.inputs) then
-        return true
+    if shared.setup.minigame == 'lation_ui' then
+        if exports.lation_ui:skillCheck(nil, data.difficulty, data.inputs) then
+            return true
+        end
+        return false
+    elseif shared.setup.minigame == 'ox_lib' then
+        if lib.skillCheck(data.difficulty, data.inputs) then
+            return true
+        end
+        return false
+    elseif shared.setup.minigame == 'custom' then
+        -- Add your custom minigame here
     end
     return false
 end

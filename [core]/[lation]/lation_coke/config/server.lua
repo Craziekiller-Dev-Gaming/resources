@@ -46,7 +46,7 @@ return {
             -- The name of the webhook
             name = 'Coke Logs',
             -- The webhook link
-            link = 'https://discord.com/api/webhooks/1352022483447971900/2FJnWocoYnJYGG6SOKZJV8cBCm15zfg1Cq6MzDQ-zWHpMCCD26XCdm2H5VvVZX7r7STC',
+            link = 'https://discord.com/api/webhooks/1406707309568196669/Ybg64-sL5xn3PxxsdXNRk18hzvCiTGEiEpexReGu7I7WrpZyRDDGgVg2rp4PX4XD1bej',
             -- The webhook profile image
             image = 'https://i.imgur.com/ILTkWBh.png',
             -- The webhook footer image

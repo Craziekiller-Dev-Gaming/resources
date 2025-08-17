@@ -9,4 +9,4 @@ CREATE TABLE IF NOT EXISTS `lation_coke_labs` (
   `users` longtext DEFAULT NULL,
   `stations` longtext DEFAULT NULL,
   PRIMARY KEY (`id`)
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

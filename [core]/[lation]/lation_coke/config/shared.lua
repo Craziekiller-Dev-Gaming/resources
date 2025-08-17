@@ -11,16 +11,25 @@ return {
         -- Set your interaction system below
         -- Available options are: 'ox_target', 'qb-target', 'interact' & 'custom'
         -- 'custom' needs to be added to client/functions.lua
-        interact = 'qb-target',
+        interact = 'ox_target',
         -- Set your notification system below
-        -- Available options are: 'ox_lib', 'esx', 'qb', 'okok', 'sd-notify', 'wasabi_notify' & 'custom'
+        -- Available options are: 'lation_ui', 'ox_lib', 'esx', 'qb', 'okok', 'sd-notify', 'wasabi_notify' & 'custom'
         -- 'custom' needs to be added to client/functions.lua
-        notify = 'qb',
+        notify = 'ox_lib',
         -- Set your progress bar system below
-        -- Available options are: 'ox_lib', 'qbcore' & 'custom'
+        -- Available options are: 'lation_ui', 'ox_lib', 'qbcore' & 'custom'
         -- 'custom' needs to be added to client/functions.lua
         -- Any custom progress bar must also support animations
-        progress = 'qbcore',
+        progress = 'ox_lib',
+        -- Set your minigame (skillcheck) system below
+        -- Available options are: 'lation_ui', 'ox_lib' & 'custom'
+        minigame = 'ox_lib',
+        -- Set your context menu system below
+        -- Available options are: 'lation_ui', 'ox_lib' & 'custom'
+        menu = 'ox_lib',
+        -- Set your alert & input dialog system below
+        -- Available options are: 'lation_ui', 'ox_lib' & 'custom'
+        dialogs = 'ox_lib',
         -- Do you want to be notified via server console if an update is available?
         -- True if yes, false if no
         version = true,
@@ -69,12 +78,12 @@ return {
             reward = { item = 'ls_coca_leaf', quantity = { min = 2, max = 4 } },
             -- A second item to reward, based on a percentage chance
             -- These are the seeds required to grow & harvest personal coca plants
-            seed = { item = 'ls_coca_seed', quantity = { min = 2, max = 2 }, chance = 2 },
+            seed = { item = 'ls_coca_seed', quantity = { min = 2, max = 2 }, chance = 5 },
             -- How much XP to reward upon a search? This is per leaf.
             -- So if a player finds x3 leaves they'll get 3xp
-            xp = { min = 2, max = 4 },
+            xp = { min = 1, max = 1 },
             -- Optional blip settings for this farm
-            blip = { enable = false, sprite = 89, color = 1, scale = 0.7, label = 'Coca Field' },
+            blip = { enable = true, sprite = 89, color = 1, scale = 0.7, label = 'Coca Field' },
             -- The coords of each plant to apply an interaction point
             -- Or, if spawn = true - the coords to spawn each plant
             coca = {
@@ -243,7 +252,7 @@ return {
         -- 'update_interval' is roughly how often in milliseconds each plant is updated
         update_interval = 15000,
         -- 'starting' is the starting values (percentage) of each
-        starting = { thirst = 100, hunger = 100, yield = 100, growth = 0 },
+        starting = { thirst = 85, hunger = 85, yield = 100, growth = 0 },
         -- 'growth_increase' is the percentage growth increases each update_interval
         -- By default, growth will increase between 0.1% & 0.3% roughly every 15 seconds
         growth_increase = { min = 0.25, max = 0.35 },
@@ -495,14 +504,14 @@ return {
             -- item: item spawn name
             -- price: price of item
             -- icon: icon for item
-            -- metadata: optional metadata for item (use 'durability' for ox_inventory, use 'quality' for all others)
-            [1] = { item = 'ls_watering_can', price = 15, icon = 'droplet', metadata = { ['durability'] = 100 } },
-            [2] = { item = 'ls_fertilizer', price = 20, icon = 'burger', metadata = { ['durability'] = 100 } },
+            -- metadata: optional metadata for item
+            [1] = { item = 'ls_watering_can', price = 15, icon = 'droplet', metadata = 100 },
+            [2] = { item = 'ls_fertilizer', price = 20, icon = 'burger', metadata = 100 },
             [3] = { item = 'ls_plant_pot', price = 10, icon = 'plant-wilt' },
             [4] = { item = 'ls_shears', price = 150, icon = 'scissors' },
             [5] = { item = 'ls_baking_soda', price = 15, icon = 'box-archive' },
             [6] = { item = 'ls_empty_baggy', price = 5, icon = 'bag-shopping' },
-            [7] = { item = 'ls_gasoline', price = 50, icon = 'gas-pump', metadata = { ['durability'] = 100 } },
+            [7] = { item = 'ls_gasoline', price = 50, icon = 'gas-pump', metadata = 100 },
             [8] = { item = 'ls_coke_table', price = 5000, icon = 'snowflake' },
             -- Add or remove items as you wish
         },

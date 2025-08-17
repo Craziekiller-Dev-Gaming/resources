@@ -298,10 +298,9 @@ function RegisterStash(labId, stashId)
 end
 
 -- Open stash
---- @param source number Player ID
 --- @param labId number Lab ID
 --- @param stashId number Stash ID
-function OpenStash(source, labId, stashId)
+function OpenStash(labId, stashId)
     if not source or not labId or not stashId then return end
 
     local lab = shared.labs[labId]
@@ -433,6 +432,23 @@ lib.callback.register('lation_coke:validateRequest', function(source)
     if not consumables[source] then return false end
     return true
 end)
+
+-- Add /resetbucket command to reset a players routing bucket
+--- @param source number Player ID
+RegisterCommand('resetbucket', function(source)
+    if not source then return end
+
+    ---@diagnostic disable-next-line: param-type-mismatch
+    local bucket = GetPlayerRoutingBucket(source)
+    if not bucket or bucket == 0 then
+        TriggerClientEvent('lation_coke:notify', source, 'You are already in the default bucket', 'error')
+        return
+    end
+
+    ---@diagnostic disable-next-line: param-type-mismatch
+    SetPlayerRoutingBucket(source, 0)
+    TriggerClientEvent('lation_coke:notify', source, 'You have reset your default bucket', 'success')
+end, false)
 
 -- Log player events if applicable
 --- @param source number Player ID

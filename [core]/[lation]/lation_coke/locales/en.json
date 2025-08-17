@@ -59,19 +59,19 @@
     },
     "alerts": {
         "pickup": {
-            "header": "**Confirm Action**",
+            "header": "Confirm Action",
             "content": "Are you sure you want to pack up the table?"
         },
         "destroy": {
-            "header": "**Confirm Action**",
+            "header": "Confirm Action",
             "content": "Are you sure you want to destroy this plant?"
         },
         "raid-stash": {
-            "header": "**Break In**",
+            "header": "Break In",
             "content": "Are you sure you want to break into this stash?"
         },
         "raid-entry": {
-            "header": "**Break In**",
+            "header": "Break In",
             "content": "Are you sure you want to break into this lab?"
         },
         "remove-authorized-user": {

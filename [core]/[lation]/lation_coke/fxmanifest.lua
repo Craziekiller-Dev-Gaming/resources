@@ -3,7 +3,7 @@ lua54 'yes'
 game 'gta5'
 name 'lation_coke'
 author 'iamlation'
-version '1.0.6'
+version '1.0.9'
 description 'An advanced coke resource for FiveM'
 
 server_scripts {

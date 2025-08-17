@@ -100,6 +100,8 @@ return {
     animations = {
         searching = {
             label = 'Searching..',
+            description = 'You begin searching the plant for leaves',
+            icon = 'fas fa-magnifying-glass',
             duration = 6000,
             position = 'bottom',
             useWhileDead = false,
@@ -110,6 +112,8 @@ return {
         },
         use_table = {
             label = 'Placing table..',
+            description = 'You search for a suitable spot to place the table',
+            icon = 'fas fa-location-dot',
             duration = 1500,
             position = 'bottom',
             useWhileDead = false,
@@ -123,16 +127,25 @@ return {
         table = {
             [1] = {
                 label = 'Processing leaves..',
+                icon = 'fas fa-mortar-pestle',
                 duration = 15000,
                 position = 'bottom',
                 useWhileDead = false,
                 canCancel = true,
+                steps = {
+                    { description = 'You place the leaves onto the table..' },
+                    { description = 'You begin crushing the leaves..' },
+                    { description = 'You finish crushing the leaves..' }
+
+                },
                 disable = { move = true, car = true, combat = true },
                 anim = { dict = 'anim@amb@business@coc@coc_unpack_cut@', clip = 'fullcut_cycle_v4_cokecutter', flag = 0 },
                 prop = {}
             },
             [2] = {
                 label = 'Adding gasoline..',
+                description = 'You begin pouring gasoline into the mixture',
+                icon = 'fas fa-gas-pump',
                 duration = 15000,
                 position = 'bottom',
                 useWhileDead = false,
@@ -143,6 +156,8 @@ return {
             },
             [3] = {
                 label = 'Adding cement..',
+                description = 'You begin pouring cement into the mixture',
+                icon = 'fas fa-square-plus',
                 duration = 15000,
                 position = 'bottom',
                 useWhileDead = false,
@@ -153,6 +168,8 @@ return {
             },
             [4] = {
                 label = 'Placing down..',
+                description = 'You carefully place the mixture into the boiler',
+                icon = 'fas fa-hand',
                 duration = 1500,
                 position = 'bottom',
                 useWhileDead = false,
@@ -163,10 +180,16 @@ return {
             },
             [5] = {
                 label = 'Packaging..',
+                icon = 'fas fa-box',
                 duration = 15000,
                 position = 'bottom',
                 useWhileDead = false,
                 canCancel = true,
+                steps = {
+                    { description = 'You cut up the powder into many small lines..' },
+                    { description = 'You carefully place the powder into the baggies..' },
+                    { description = 'You finish packing & seal the baggies..' }
+                },
                 disable = { move = true, car = true, combat = true },
                 anim = { dict = 'anim@amb@business@coc@coc_unpack_cut@', clip = 'fullcut_cycle_v4_cokecutter', flag = 0 },
                 prop = {}
@@ -177,16 +200,25 @@ return {
         lab = {
             [1] = {
                 label = 'Processing leaves..',
+                icon = 'fas fa-mortar-pestle',
                 duration = 10000,
                 position = 'bottom',
                 useWhileDead = false,
                 canCancel = true,
+                steps = {
+                    { description = 'You place the leaves onto the table..' },
+                    { description = 'You begin crushing the leaves..' },
+                    { description = 'You finish crushing the leaves..' }
+
+                },
                 disable = { move = true, car = true, combat = true },
                 anim = { dict = 'anim@amb@business@coc@coc_unpack_cut@', clip = 'fullcut_cycle_v4_cokecutter', flag = 0 },
                 prop = {}
             },
             [2] = {
                 label = 'Adding gasoline..',
+                description = 'You begin pouring gasoline into the mixture',
+                icon = 'fas fa-gas-pump',
                 duration = 10000,
                 position = 'bottom',
                 useWhileDead = false,
@@ -197,6 +229,8 @@ return {
             },
             [3] = {
                 label = 'Adding cement..',
+                description = 'You begin pouring cement into the mixture',
+                icon = 'fas fa-square-plus',
                 duration = 10000,
                 position = 'bottom',
                 useWhileDead = false,
@@ -207,6 +241,8 @@ return {
             },
             [4] = {
                 label = 'Placing down..',
+                description = 'You carefully place the mixture into the boiler',
+                icon = 'fas fa-hand',
                 duration = 1500,
                 position = 'bottom',
                 useWhileDead = false,
@@ -217,6 +253,8 @@ return {
             },
             [5] = {
                 label = 'Placing down..',
+                description = 'You carefully place the mixture into the boiler',
+                icon = 'fas fa-hand',
                 duration = 1500,
                 position = 'bottom',
                 useWhileDead = false,
@@ -227,6 +265,8 @@ return {
             },
             [6] = {
                 label = 'Cutting..',
+                description = 'You begin cutting the coke with a cutting agent',
+                icon = 'fas fa-scissors',
                 duration = 10000,
                 position = 'bottom',
                 useWhileDead = false,
@@ -237,10 +277,16 @@ return {
             },
             [7] = {
                 label = 'Packaging..',
+                icon = 'fas fa-box',
                 duration = 10000,
                 position = 'bottom',
                 useWhileDead = false,
                 canCancel = true,
+                steps = {
+                    { description = 'You cut up the powder into many small lines..' },
+                    { description = 'You carefully place the powder into the baggies..' },
+                    { description = 'You finish packing & seal the baggies..' }
+                },
                 disable = { move = true, car = true, combat = true },
                 anim = { dict = 'anim@amb@business@coc@coc_unpack_cut@', clip = 'fullcut_cycle_v4_cokecutter', flag = 0 },
                 prop = {}
@@ -248,6 +294,7 @@ return {
         },
         pickup_table = {
             label = 'Picking up table..',
+            icon = 'fas fa-hand',
             duration = 1500,
             position = 'bottom',
             useWhileDead = false,
@@ -258,6 +305,8 @@ return {
         },
         place_seed = {
             label = 'Placing seed..',
+            description = 'You search for a suitable spot to plant',
+            icon = 'fas fa-seedling',
             duration = 1200,
             position = 'bottom',
             useWhileDead = false,
@@ -269,6 +318,8 @@ return {
         watering = {
             part1 = {
                 label = 'Watering..',
+                description = 'You begin watering the plant',
+                icon = 'fas fa-droplet',
                 duration = 4000,
                 position = 'bottom',
                 useWhileDead = false,
@@ -285,6 +336,8 @@ return {
         fertilizing = {
             part1 = {
                 label = 'Fertilizing..',
+                description = 'You begin fertilizing the plant',
+                icon = 'fas fa-burger',
                 duration = 4000,
                 position = 'bottom',
                 useWhileDead = false,
@@ -300,6 +353,7 @@ return {
         },
         harvesting = {
             label = 'Harvesting..',
+            icon = 'fas fa-trowel',
             duration = 4000,
             position = 'bottom',
             useWhileDead = false,
@@ -310,6 +364,8 @@ return {
         },
         destroy_plant = {
             label = 'Destroying..',
+            description = 'You begin destroying the plant',
+            icon = 'fas fa-trash',
             duration = 4000,
             position = 'bottom',
             useWhileDead = false,
@@ -320,7 +376,7 @@ return {
         },
         take_cement = {
             label = 'Taking cement..',
-            duration = 750,
+            duration = 1500,
             position = 'bottom',
             useWhileDead = false,
             canCancel = false,
