@@ -13,6 +13,7 @@ if wsb.framework == 'esx' then ESX = exports['es_extended']:getSharedObject() en
 --Send to jail
 RegisterNetEvent('wasabi_police:sendToJail', function()
     if not wsb.hasGroup(Config.policeJobs) then return end
+    if deathCheck() or isCuffed then return end
     local target, time
 
     if Config.Jail.input or Config.Jail.BuiltInPrison.enabled then
@@ -98,13 +99,21 @@ function OpenPersonalStash(station)
     if not wsb.inventorySystem then return end
     if not wsb.hasGroup(Config.policeJobs) then return end
 
-    station = station .. '_' .. wsb.getIdentifier()
-
+    local id = station .. '_' .. wsb.getIdentifier()
+    if wsb.awaitServerCallback('wasabi_police:registerStash', {
+        name = id,
+        slots = 30,
+        maxWeight = 50000,
+        station = station,
+        location = 'personalLocker'
+        
+    }) then 
     wsb.inventory.openStash({
-        name = station,
+        name = id,
         maxWeight = 50000,
         slots = 30
     })
+    end
 end
 
 -- Evidence locker access
@@ -131,17 +140,25 @@ function OpenEvidenceLocker(station)
 
     input = math.floor(input)
 
-    station = station .. '_evidence_' .. input
-
-    wsb.inventory.openStash({
-        name = station,
+    local id = station .. '_evidence_' .. input
+    if wsb.awaitServerCallback('wasabi_police:registerStash', {
+        name = id,
+        slots = 100,
         maxWeight = 500000,
-        slots = 100
+        station = station,
+        location = 'evidenceLocker'
+    }) then
+        wsb.inventory.openStash({
+            name = id,
+            maxWeight = 500000,
+            slots = 100
     })
+    end
 end
 
 --Search player
 searchPlayer = function(player)
+    if deathCheck() or isCuffed then return end
     if not wsb.inventorySystem then
         if GetResourceState('mf-inventory') == 'started' then
             local identifier = wsb.awaitServerCallback('wasabi_police:getIdentifier', GetPlayerServerId(player))
@@ -191,6 +208,7 @@ end)
 -- Billing event
 AddEventHandler('wasabi_police:finePlayer', function()
     if not wsb.hasGroup(Config.policeJobs) then return end
+    if deathCheck() or isCuffed then return end
     local hasJob, _grade = wsb.getGroup()
     local coords = GetEntityCoords(wsb.cache.ped)
     local player = wsb.getClosestPlayer(vec3(coords.x, coords.y, coords.z), 2.0, false)
@@ -241,6 +259,7 @@ openJobMenu = function()
     local job, grade = wsb.hasGroup(Config.policeJobs)
     if not job or not grade then return end
     if not wsb.isOnDuty() then return end
+    if deathCheck() or isCuffed then return end
     local jobLabel = Strings.police
     local Options = {}
     if Config.searchPlayers then

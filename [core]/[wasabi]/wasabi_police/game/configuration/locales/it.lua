@@ -24,6 +24,7 @@ Strings = {
 
     new_speed_trap = 'Nuovo Autovelox',
     speed_limit = 'Limite di Velocità',
+    detection_radius = 'Raggio di rilevamento',
     incorrect_input = 'Input Errato',
     incorrect_input_cancel = 'Input precedente annullato.',
     incorrect_input_speed = 'Inserisci un limite di velocità valido.',

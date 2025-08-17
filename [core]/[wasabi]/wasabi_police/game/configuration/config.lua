@@ -320,7 +320,7 @@ Config.RadarPosts = {           -- Radar posts for speed detection
     -- (If false, fines will be deducted from the speeder but credited to no where)
     -- (Set to string of specific account if you wish for a singular account to receive all fine recoveries)
     creditSociety = true,
-
+    detectionRadius = 5,  -- Radius within which the radar detects speeders
     thresholds = {   -- Speed thresholds for fines
         [5] = 50,    -- 5 over = $50 fine
         [10] = 100,  -- 10 over = $100 fine
@@ -331,7 +331,7 @@ Config.RadarPosts = {           -- Radar posts for speed detection
     },
 
     blip = {
-        enabled = false,      -- Enable blips for radar posts?
+        enabled = true,      -- Enable blips for radar posts?
         label = 'Radar Post', -- Blip label
         sprite = 184,         -- Blip sprite
         color = 0,            -- Blip color
@@ -449,6 +449,15 @@ Config.GPSBlips = {
     }
 }
 
+Config.Objects = { -- compatibility for the object spawner in qb-radialmenu
+    cone = { model = `prop_roadcone02a`, freeze = false },
+    barrier = { model = `prop_barrier_work06a`, freeze = true },
+    roadsign = { model = `prop_snow_sign_road_06g`, freeze = true },
+    tent = { model = `prop_gazebo_03`, freeze = true },
+    light = { model = `prop_worklight_03b`, freeze = true },
+    spikeStrip = { model = `p_ld_stinger_s`, freeze = true }
+}
+
 Config.Props = { -- What props are avaliable in the "Place Objects" section of the job menu
 
     {
@@ -481,16 +490,16 @@ Config.Props = { -- What props are avaliable in the "Place Objects" section of t
             --            ['sheriff'] = 0,
         }
     },
-    -- {
-    --     title = 'Spike Strip',
-    --     description = '',
-    --     model = `p_ld_stinger_s`,
-    --     freeze = true, -- Make prop unmovable
-    --     groups = {
-    --         ['police'] = 0,
-    --         --            ['sheriff'] = 0,
-    --     }
-    -- },
+    {
+        title = 'Spike Strip',
+        description = '',
+        model = `p_ld_stinger_s`,
+        freeze = true, -- Make prop unmovable
+        groups = {
+            ['police'] = 0,
+            --            ['sheriff'] = 0,
+        }
+    },
 
 }
 
@@ -562,20 +571,20 @@ Config.Locations = {
             },
             jobLock = 'police',                                                                          -- Allow only one of Config.policeJob listings / Set to false if allow all Config.policeJobs
             weapons = {
-                [0] = {            
+                [0] = {                                                                                  -- Grade number will be the name of each table(this would be grade 0)        
                     { name = 'WEAPON_FLASHLIGHT' , label = 'Flashlight', multiple = true, price = 10 },                                                     
                 { name = 'WEAPON_NIGHTSTICK', label = 'Night Stick', multiple = false, price = 50 }, 
                 { name = 'WEAPON_stungun', label = 'Taser', multiple = false, price = 50 },                -- Grade number will be the name of each table(this would be grade 0)
-                { name = 'police_stormram' , label = 'Stormram', multiple = true, price = 10 },
                 { name = 'handcuffs' , label = 'Handcuffs', multiple = false, price = 10 },
                 { name = 'uvlight' , label = 'UV Light', multiple = false, price = 10 },
                 { name = 'armor', label = 'Armor', multiple = true, price = 250 },
                 { name = 'medikit', label = 'Medical Kit', multiple = true, price = 50 },
                 { name = 'radio', label = 'Medical Kit', multiple = true, price = 50 },
                 { name = 'mdt', label = 'Police MDT', multiple = false, price = 50 },
+                    --  { name = 'ammo-9' , label = '9mm Ammo', multiple = true, price = 10 }, -- Set multiple to true if you want ability to purchase more than one at a time
                     --  { name = 'armour', label = 'Bulletproof Vest', multiple = false, price = 100 }, -- Example
-                },
 
+                },
                 [1] = { -- This would be grade 1
                 { name = 'WEAPON_FLASHLIGHT' , label = 'Flashlight', multiple = true, price = 10 },                                                     
                 { name = 'WEAPON_NIGHTSTICK', label = 'Night Stick', multiple = false, price = 50 }, 
@@ -583,7 +592,6 @@ Config.Locations = {
                 { name = 'WEAPON_COMBATPISTOL',     label = 'PD Pistol',      multiple = false, price = 150 }, -- Set price to false if undesired
                 { name = 'pistol_flashlight',     label = 'PD Pistol Flashlight',      multiple = false, price = 150 },
                 { name = 'pistol_ammo' , label = 'Pistol Clip', multiple = true, price = 10 }, -- Set multiple to true if you want ability to purchase more than one at a time
-                { name = 'police_stormram' , label = 'Stormram', multiple = true, price = 10 },
                 { name = 'handcuffs' , label = 'Handcuffs', multiple = false, price = 10 },
                 { name = 'uvlight' , label = 'UV Light', multiple = false, price = 10 },
                 { name = 'armor', label = 'Armor', multiple = true, price = 250 },
@@ -790,7 +798,7 @@ Config.Locations = {
         evidenceLocker = {
             enabled = true,                      -- Enable evidence locker for this station?
             jobLock = 'police',                   -- Job lock?
-            coords = vec3(472.5, -991.21, 26.27), -- Area to prompt personal locker
+            coords = vector3(-582.4, -442.67, 31.16), -- Area to prompt personal locker
             range = 2.0,                          -- Range it will prompt from coords above
             label = '[E] - Access Evidence Locker',
             target = {
@@ -808,21 +816,21 @@ Config.Locations = {
 
 
         vehicles = {                                   -- Vehicle Garage
-            enabled = false,                            -- Enable? False if you have you're own way for medics to obtain vehicles.
+            enabled = true,                            -- Enable? False if you have you're own way for medics to obtain vehicles.
             jobLock = 'police',                        -- Job lock? or access to all police jobs by using false
             zone = {
-                coords = vec3(463.69, -1019.72, 28.1), -- Area to prompt vehicle garage
+                coords = vector3(-599.25, -426.42, 31.16), -- Area to prompt vehicle garage
                 range = 5.5,                           -- Range it will prompt from coords above
                 label = '[E] - Access Garage',
                 return_label = '[E] - Return Vehicle'
             },
             spawn = {
                 land = {
-                    coords = vec3(449.37, -1025.46, 28.59), -- Coords of where land vehicle spawn/return
+                    coords = vector4(-577.4, -423.14, 30.77, 89.15), -- Coords of where land vehicle spawn/return
                     heading = 3.68
                 },
                 air = {
-                    coords = vec3(449.29, -981.76, 43.69), -- Coords of where air vehicles spawn/return
+                    coords = vector3(-596.12, -431.34, 51.38), -- Coords of where air vehicles spawn/return
                     heading = 0.01
                 }
             },

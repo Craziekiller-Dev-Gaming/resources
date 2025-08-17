@@ -24,6 +24,7 @@ Strings = {
 
     new_speed_trap = '新测速器',
     speed_limit = '速度限制',
+    detection_radius = '探测半径',
     incorrect_input = '输入错误',
     incorrect_input_cancel = '取消了先前的输入。',
     incorrect_input_speed = '请输入有效的速度限制。',

@@ -24,6 +24,7 @@ Strings = {
 
     new_speed_trap = 'Nowa pułapka prędkości',
     speed_limit = 'Ograniczenie prędkości',
+    detection_radius = 'Promień detekcji',
     incorrect_input = 'Niepoprawne dane wejściowe',
     incorrect_input_cancel = 'Anulowano poprzednie dane wejściowe.',
     incorrect_input_speed = 'Proszę wprowadzić poprawne ograniczenie prędkości.',

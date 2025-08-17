@@ -24,6 +24,7 @@ Strings = {
 
     new_speed_trap = 'Ny Fartfælde',
     speed_limit = 'Fartgrænse',
+    detection_radius = 'Detektionsradius',
     incorrect_input = 'Forkert Indtastning',
     incorrect_input_cancel = 'Forrige indtastning annulleret.',
     incorrect_input_speed = 'Indtast venligst en gyldig fartgrænse.',

@@ -24,6 +24,7 @@ Strings = {
 
     new_speed_trap = '새 속도 함정',
     speed_limit = '속도 제한',
+    detection_radius = '탐지 반경',
     incorrect_input = '잘못된 입력',
     incorrect_input_cancel = '이전 입력 취소됨.',
     incorrect_input_speed = '유효한 속도 제한을 입력하세요.',

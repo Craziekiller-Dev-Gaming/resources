@@ -24,6 +24,7 @@ Strings = {
 
     new_speed_trap = 'Nová rychlostní past',
     speed_limit = 'Rychlostní limit',
+    detection_radius = 'Detekční rozsah',
     incorrect_input = 'Nesprávný vstup',
     incorrect_input_cancel = 'Předchozí vstup zrušen.',
     incorrect_input_speed = 'Prosím, zadejte platný rychlostní limit.',

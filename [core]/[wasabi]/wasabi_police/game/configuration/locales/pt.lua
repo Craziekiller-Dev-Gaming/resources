@@ -24,6 +24,7 @@ Strings = {
 
     new_speed_trap = 'Novo Radar',
     speed_limit = 'Limite de Velocidade',
+    detection_radius = 'Raio de detecção',
     incorrect_input = 'Entrada Incorreta',
     incorrect_input_cancel = 'Entrada anterior cancelada.',
     incorrect_input_speed = 'Por favor, insira um limite de velocidade válido.',

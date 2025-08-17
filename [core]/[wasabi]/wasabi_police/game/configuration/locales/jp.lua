@@ -24,6 +24,7 @@ Strings = {
 
     new_speed_trap = '新しいスピードトラップ',
     speed_limit = '速度制限',
+    detection_radius = '検知半径',
     incorrect_input = '入力が間違っています',
     incorrect_input_cancel = '前の入力をキャンセルしました。',
     incorrect_input_speed = '有効な速度制限を入力してください。',

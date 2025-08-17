@@ -24,6 +24,7 @@ Strings = {
 
     new_speed_trap = 'New Speed Trap',
     speed_limit = 'Speed Limit',
+    detection_radius = 'Detection Radius',
     incorrect_input = 'Incorrect Input',
     incorrect_input_cancel = 'Cancelled previous input.',
     incorrect_input_speed = 'Please enter a valid speed limit.',

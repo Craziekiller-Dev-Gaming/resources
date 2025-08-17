@@ -33,6 +33,9 @@ AddEventHandler('wasabi_bridge:onPlayerSpawn', function()
         escorted.active = nil
         escorted.pdId = nil
     end
+    if Config.UseRadialMenu then
+        DisableRadial(false)
+    end
 end)
 
 AddEventHandler('wasabi_bridge:onPlayerLogout', function()
@@ -57,6 +60,9 @@ AddEventHandler('wasabi_bridge:onPlayerDeath', function()
         TriggerServerEvent('wasabi_police:escortPlayerStop', escorted.pdId, true)
         escorted.active = nil
         escorted.pdId = nil
+    end
+    if Config.UseRadialMenu then
+        DisableRadial(true)
     end
 end)
 
@@ -212,15 +218,18 @@ RegisterNetEvent('wasabi_police:trackPlayer', function()
         TriggerEvent('wasabi_bridge:notify', Strings.no_nearby, Strings.no_nearby_desc, 'error')
         return 
     end
-    local hasItem = wsb.awaitServerCallback('wasabi_police:itemCheck', Config.TrackingBracelet.item)
-    if Config.TrackingBracelet.item and not hasItem or hasItem < 1 then
-        TriggerEvent('wasabi_bridge:notify', Strings.no_tracking_bracelet, Strings.no_tracking_bracelet_desc, 'error')
-        return
-    end
     TaskTurnPedToFaceEntity(wsb.cache.ped, GetPlayerPed(player), 2000)
-    Wait(2000)
     player = GetPlayerServerId(player)
-    local label = Player(player).state.tracking and Strings.stop_tracking or Strings.start_tracking
+    local state = Player(player).state.tracking
+    local label = state and Strings.stop_tracking or Strings.start_tracking
+    if not state then 
+        local hasItem = wsb.awaitServerCallback('wasabi_police:itemCheck', Config.TrackingBracelet.item)
+        if Config.TrackingBracelet.item and not hasItem or hasItem < 1 then
+            TriggerEvent('wasabi_bridge:notify', Strings.no_tracking_bracelet, Strings.no_tracking_bracelet_desc, 'error')
+            return
+        end
+    end 
+    Wait(2000)
     wsb.stream.animDict('anim@amb@clubhouse@tutorial@bkr_tut_ig3@')
     TaskPlayAnim(wsb.cache.ped, 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@', 'machinic_loop_mechandplayer', 8.0, -8.0, -1, 1, 0, false, false, false)
     if wsb.progressUI({
@@ -268,7 +277,6 @@ RegisterNetEvent('wasabi_police:refreshTrackingData', function(data)
 end)
 
 RegisterNetEvent('wasabi_police:removeTrackedPlayer', function(target)
-    print(json.encode(activeBlips[target]))
     if activeBlips[target] then
         RemoveBlip(activeBlips[target])
         activeBlips[target] = nil
@@ -545,9 +553,16 @@ AddEventHandler('wasabi_police:outVehiclePlayer', function()
     local player = wsb.getClosestPlayer(coords, 4.0, false)
     if not player then
         TriggerEvent('wasabi_bridge:notify', Strings.no_nearby, Strings.no_nearby_desc, 'error')
-    else
-        TriggerServerEvent('wasabi_police:outVehiclePlayer', GetPlayerServerId(player))
+        return
     end
+
+    local vehicle = GetVehiclePedIsIn(wsb.cache.ped, false)
+    local speed = GetEntitySpeed(vehicle)
+    if speed > 0.1 then return end
+
+    if IsPedSittingInAnyVehicle(wsb.cache.ped) then return end -- to prevent someone in a vehicle to remove target player from the vehicle
+
+    TriggerServerEvent('wasabi_police:outVehiclePlayer', GetPlayerServerId(player))
 end)
 
 AddEventHandler('wasabi_police:vehicleInteractions', function()
@@ -689,10 +704,26 @@ AddEventHandler('wasabi_police:gsrTest', function()
     GSRTestNearbyPlayer()
 end)
 
-AddEventHandler('wasabi_police:toggleDuty', function()
+AddEventHandler('wasabi_police:toggleDuty', function(stationId)
     local job, grade = wsb.hasGroup(Config.policeJobs)
-    if not job or not grade then return end
-    TriggerServerEvent('wasabi_police:svToggleDuty', job, grade)
+    if not job then
+        if wsb.framework == 'esx' then
+            local jobs = Config.policeJobs
+            if type(jobs) == 'table' then
+                for i = 1, #jobs do
+                    job, grade = wsb.hasGroup('off' .. jobs[i])
+                    if job then break end
+                end
+            else
+                job, grade = wsb.hasGroup('off' .. jobs)
+            end
+        end
+    end
+    if not job then return end
+    if wsb.framework == 'qb' then
+        wsb.playerData.job.onduty = not wsb.playerData.job.onduty
+    end
+    TriggerServerEvent('wasabi_police:svToggleDuty', stationId.args)
 end)
 
 CreateThread(function()
@@ -1033,6 +1064,7 @@ CreateThread(function()
             options[id] = {
                 num = id,
                 event = 'wasabi_police:searchPlayer',
+                icon = 'fas fa-magnifying-glass',
                 label = Strings.search_player,
                 canInteract = function()
                     if not wsb.isOnDuty() then return false end
@@ -1202,6 +1234,7 @@ CreateThread(function()
                         options = {
                             {
                                 event = 'wasabi_police:toggleDuty',
+                                args = k,
                                 icon = 'fa-solid fa-business-time',
                                 label = v.clockInAndOut.target.label,
                                 distance = v.clockInAndOut.target.distance or 2.0,
@@ -1243,7 +1276,7 @@ CreateThread(function()
                                     textUI = true
                                 end
                                 if IsControlJustReleased(0, 38) then
-                                    TriggerServerEvent('wasabi_police:svToggleDuty', jobName, jobGrade)
+                                    TriggerServerEvent('wasabi_police:svToggleDuty', k)
                                 end
                             end
                         end,
@@ -1532,15 +1565,15 @@ CreateThread(function()
                         job = JobArrayToTarget(Config.policeJobs),
                         options = {
                             {
+                                event = 'wasabi_police:armouryMenu',
                                 icon = 'fa-solid fa-archive',
                                 label = v.armoury.target.label,
                                 distance = v.armoury.target.distance or 2.0,
                                 job = JobArrayToTarget(Config.policeJobs),
                                 groups = JobArrayToTarget(Config.policeJobs),
                                 station = k,
-                                onSelect = function()
-                                    armouryMenu(k)
-                                end
+                                
+
                             }
                         }
                     })
@@ -1814,8 +1847,8 @@ if Config.RadarPosts and Config.RadarPosts.enabled then
                             if model == Config.RadarPosts.options[i].prop or model == joaat(Config.RadarPosts.options[i].prop) then
                                 configIndex = i
                                 local input = wsb.inputDialog(Strings.new_speed_trap, { Strings.name, Strings
-                                    .speed_limit }, Config.UIColor)
-                                if not input or not input[1] or not input[2] then
+                                    .speed_limit, Strings.detection_radius }, Config.UIColor)
+                                if not input or #input < 3 then
                                     TriggerEvent('wasabi_bridge:notify', Strings.incorrect_input,
                                         Strings.incorrect_input_cancel,
                                         'error')
@@ -1823,8 +1856,8 @@ if Config.RadarPosts and Config.RadarPosts.enabled then
                                 end
 
                                 input[2] = tonumber(input[2])
-
-                                if not input[2] or input[2] < 1 then
+                                input[3] = tonumber(input[3])                                
+                                if not input[2] or input[2] < 5 then
                                     TriggerEvent('wasabi_bridge:notify', Strings.incorrect_input,
                                         Strings.incorrect_input_speed, 'error')
                                 else
@@ -2176,6 +2209,10 @@ AddEventHandler('wasabi_police:evidenceLocker', function(data)
     OpenEvidenceLocker(data.station)
 end)
 
+AddEventHandler('wasabi_police:armouryMenu', function(data)
+    armouryMenu(data.station)
+end)
+
 RegisterNetEvent('wasabi_police:alertDialog', function(data)
     data.color = Config.UIColor
     wsb.alertDialog(data)
@@ -2329,6 +2366,9 @@ RegisterNetEvent('wasabi_bridge:setJob', function(JobInfo)
     if isInList(oldJob.name, Config.policeJobs) and not isInList(JobInfo.name, Config.policeJobs) then
         TriggerServerEvent('wasabi_police:addPoliceCount', false)
         oldJob = JobInfo
+        if Config.UseRadialMenu then
+            RemoveRadialItems()
+        end
         return
     end
 
@@ -2337,6 +2377,9 @@ RegisterNetEvent('wasabi_bridge:setJob', function(JobInfo)
             TriggerServerEvent('wasabi_police:addPoliceCount', true)
         end
         oldJob = JobInfo
+        if Config.UseRadialMenu then
+            AddRadialItems()
+        end
         return
     end
 
@@ -2346,8 +2389,14 @@ RegisterNetEvent('wasabi_bridge:setJob', function(JobInfo)
             if oldJob.onduty == JobInfo.onduty then return end
             if oldJob.onduty and not JobInfo.onduty then
                 TriggerServerEvent('wasabi_police:addPoliceCount', false)
+                if Config.UseRadialMenu then
+                    RemoveRadialItems()
+                end
             elseif not oldJob.onduty and JobInfo.onduty then
                 TriggerServerEvent('wasabi_police:addPoliceCount', true)
+                if Config.UseRadialMenu then
+                    AddRadialItems()
+                end
             end
         end
     end
@@ -2509,6 +2558,44 @@ if wsb.framework == 'qb' then -- QBCore Compatibility
     RegisterNetEvent('police:client:SearchPlayer', function()
         TriggerEvent('wasabi_police:searchPlayer')
     end)
+
+    -- QB-Radialmenu Object Spawn compatibility
+    if GetResourceState('qb-radialmenu') == 'started' then
+        local function SpawnProp(prop)
+            local x, y, z = table.unpack(GetOffsetFromEntityInWorldCoords(wsb.cache.ped, 0.0, 2.0, 0.55))
+            local obj = CreateObjectNoOffset(prop.model, x, y, z, true, false, false)
+            SetEntityHeading(obj, GetEntityHeading(wsb.cache.ped))
+            PlaceObjectOnGroundProperly(obj)
+            
+            if prop.freeze ~= false then
+                FreezeEntityPosition(obj, true)
+            end
+        end
+    
+        RegisterNetEvent('police:client:spawnCone', function()
+            SpawnProp(Config.Objects.cone)
+        end)
+    
+        RegisterNetEvent('police:client:spawnBarrier', function()
+            SpawnProp(Config.Objects.barrier)
+        end)
+    
+        RegisterNetEvent('police:client:spawnRoadSign', function()
+            SpawnProp(Config.Objects.roadsign)
+        end)
+    
+        RegisterNetEvent('police:client:spawnTent', function()
+            SpawnProp(Config.Objects.tent)
+        end)
+    
+        RegisterNetEvent('police:client:spawnLight', function()
+            SpawnProp(Config.Objects.light)
+        end)
+    
+        RegisterNetEvent('police:client:SpawnSpikeStrip', function()
+            SpawnProp(Config.Objects.spikeStrip)
+        end)
+    end
 end
 
 if Config.billingSystem == 'qb' then

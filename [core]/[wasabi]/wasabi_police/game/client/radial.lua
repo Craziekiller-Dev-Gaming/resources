@@ -1,7 +1,33 @@
 -----------------For support, scripts, and more----------------
 --------------- https://discord.gg/wasabiscripts  -------------
 ---------------------------------------------------------------
+if not wsb then return print((Strings.no_wsb):format(GetCurrentResourceName())) end
 if not Config.UseRadialMenu then return end
+
+function AddRadialItems()
+	Wait(100) -- Don't remove this, for some reason it's needed during job changes
+	if wsb.hasGroup(Config.policeJobs) then
+		if wsb.isOnDuty() then
+			exports.ox_lib:addRadialItem({
+				{
+					id = 'pd_general',
+					label = 'Police',
+					icon = 'shield-halved',
+					menu = 'police_menu'
+				},
+			})
+		end
+	end
+end
+
+function RemoveRadialItems()
+    exports.ox_lib:removeRadialItem('pd_general')
+end
+
+function DisableRadial(state)
+	exports.ox_lib:disableRadial(state)
+end
+
 exports.ox_lib:registerRadial({ -- Police menu
 	id = 'police_menu',
 	items = {

@@ -24,6 +24,7 @@ Strings = {
 
     new_speed_trap = 'नई स्पीड ट्रैप',
     speed_limit = 'गति सीमा',
+    detection_radius = 'पता लगाने की त्रिज्या',
     incorrect_input = 'गलत इनपुट',
     incorrect_input_cancel = 'पिछला इनपुट रद्द किया गया।',
     incorrect_input_speed = 'कृपया एक वैध गति सीमा दर्ज करें।',

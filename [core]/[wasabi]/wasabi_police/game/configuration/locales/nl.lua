@@ -24,6 +24,7 @@ Strings = {
 
     new_speed_trap = 'Nieuwe Snelheidscontrole',
     speed_limit = 'Snelheidslimiet',
+    detection_radius = 'Detectiestraal',
     incorrect_input = 'Onjuiste invoer',
     incorrect_input_cancel = 'Vorige invoer geannuleerd.',
     incorrect_input_speed = 'Voer een geldige snelheidslimiet in.',
