@@ -1,0 +1,48 @@
+Loc['se'] = {
+    info = {
+        ['button'] = "[E] - ",
+        ['test_wires'] = "Testar kablar..",
+        ['register_lockpicking'] = "Bryt upp kassan..",
+        ['atm'] = "Hackar bankomat..",
+        ['server'] = "Tar bort hårddisk..",
+        ['npc'] = "Hotar butiksägaren..",
+        ['connecting_harddrive'] = "Ansluter hårddisk..",
+        ['copying_data'] = "Kopierar data till ett USB-minne..",
+        ['shelf'] = "Tar snacks..",
+        ['safe'] = "Bryter upp kassaskåpet..",
+        ['door'] = "Sätter in nyckel..",
+    },
+
+    error = {
+        ['failed'] = "Du misslyckades",
+        ['missing_item'] = "Du saknar ett föremål",
+        ['enough_cops'] = "Det går inte att göra detta just nu",
+        ['used'] = "Någon annan har redan gjort det",
+        ['initiate_robbery'] = "Du har inte påbörjat rånet ännu!",
+        ['level'] = "Detta verkar vara väldigt svårt för dig",
+        ['permission'] = "Du har inte behörighet att använda detta",
+        ['cooldown'] = "Återhämtar sig fortfarande från det senaste rånet",
+        ['glitch'] = "Bra försök",
+        ['corrupted'] = "Några av datafilerna blev korrupta",
+        ['not_int'] = "Du verkar inte skrämmande",
+        ['max_item'] = "Du kan inte ta fler föremål från hyllorna",
+        ['missing_harddrive'] = "Du saknar hårddisken!",
+    },
+
+    success = {
+        ['bonus_item'] = "Du hittade ett bonusföremål!",
+        ['wire_found'] = "Du hittade den ansvariga kabeln!",
+        ['register_unlocked'] = "Du låste upp registret!",
+        ['atm_robbed'] = "Du infiltrerade bankomaten!",
+        ['harddrive_installed'] = "Du anslöt hårddisken!",
+        ['scared'] = "Snälla skjut mig inte!!!",
+        ['key'] = "Okej! Okej! Jag ger dig nyckeln!",
+        ['key_obtained'] = "Du fick en nyckel!",
+        ['server_hacked'] = "Du installerade hårddisken!",
+        ['harddrive_connected'] = "Du anslöt till hårddisken!",
+        ['data_copied'] = "Du kopierade data!",
+        ['safe_unlocked'] = "Du låste upp kassaskåpet!",
+        ['door_unlocked'] = "Du låste upp dörren!",
+    },
+}
+-- Everything was translated by Project X Team translator Greken!
