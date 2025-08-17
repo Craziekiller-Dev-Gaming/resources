@@ -1,0 +1,11 @@
+CreateBlips = function(coords)
+    local Blips = AddBlipForCoord(coords.x, coords.y, coords.z)
+    SetBlipSprite(Blips, 225)
+    SetBlipDisplay(Blips, 4)
+    SetBlipScale(Blips, 0.60)
+    SetBlipAsShortRange(Blips, true)
+    SetBlipColour(Blips, 2)
+    BeginTextCommandSetBlipName('STRING')
+    AddTextComponentSubstringPlayerName("Car Rentals")
+    EndTextCommandSetBlipName(Blips)
+end

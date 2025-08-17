@@ -1,0 +1,42 @@
+{
+  "emote_menu": "EMOTE MENU",
+  "search_emote": "SEARCH EMOTE",
+  "favoruite": "FAVOURITE",
+  "exit": "EXIT",
+
+  "favourite_emotes": "FAVOURITE EMOTES",
+
+  "enable_emotes_preview_btn": "ENABLE EMOTE PREVIEWS",
+  "disable_emotes_preview_btn": "DISABLE EMOTE PREVIEWS",
+
+  "reset_walks_style": "Reset Walks Style",
+  "reset_expression": "Reset Expression",
+  "pause_animation": "Pause Animation",
+  "movement": "Movement",
+  "loop_animation": "Loop Animation",
+  "upper_body_anim": "Upper Body Anim",
+
+  "empty": "EMPTY",
+
+  "from": "FROM",
+  "accept": "ACCEPT",
+  "cancel": "CANCEL",
+
+  "accept_prev": "ACCEPT",
+  "cancel_prev": "CANCEL",
+  "rotation": "ROTATION",
+  "movement_prev": "MOVEMENT",
+  "height+": "HEIGHT +",
+  "height-": "HEIGHT -",
+
+  "all_emotes": "ALL EMOTES",
+  "animal_emotes": "ANIMAL EMOTES",
+  "dances": "DANCES",
+  "emotes": "EMOTES",
+  "exits": "EXITS",
+  "expressions": "EXPRESSIONS",
+  "prop_emotes": "PROP EMOTES",
+  "shared_dances": "SHARED DANCES",
+  "shared_emotes": "SHARED EMOTES",
+  "walks_styles": "WALKS STYLES"
+}
