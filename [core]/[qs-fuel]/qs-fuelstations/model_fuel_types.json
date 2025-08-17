@@ -1,0 +1,18 @@
+[
+    {
+        "model": "t20",
+        "fuel_type": "petrol"
+    },
+    {
+        "model": "nero",
+        "fuel_type": "diesel"
+    },
+    {
+        "model": "cyclone",
+        "fuel_type": "electric"
+    },
+    {
+        "model": "gbstarlight",
+        "fuel_type": "electric"
+    }
+]

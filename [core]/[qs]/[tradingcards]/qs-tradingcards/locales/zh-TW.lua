@@ -1,0 +1,34 @@
+Locales['zh-TW'] = {
+    -- 菜單
+    ['TRADINGCARDS_MENU_TITLE'] = '卡片互動',
+    ['TRADINGCARDS_MENU_SHOW_TITLE'] = '查看或展示',
+    ['TRADINGCARDS_MENU_SHOW_DESCRIPTION'] = '查看你的卡片並向周圍展示',
+    ['TRADINGCARDS_MENU_ALBUM_TITLE'] = '保存到相簿',
+    ['TRADINGCARDS_MENU_ALBUM_DESCRIPTION'] = '將卡片保存到所選的相簿',
+    ['TRADINGCARDS_MENU_ALBUM'] = '選擇相簿',
+    ['TRADINGCARDS_MENU_ALBUM_SLOTS'] = '插槽:',
+    ['TRADINGCARDS_MENU_ALBUM_TOTAL'] = '卡片總數:',
+    ['TRADINGCARDS_MENU_ALBUM_EMPTY'] = '可用插槽:',
+    ['TRADINGCARDS_MENU_SEARCH_CARDS'] = '搜尋卡片',
+    ['TRADINGCARDS_MENU_CARD_NAME'] = '卡片名稱',
+    ['TRADINGCARDS_MENU_ADMIN_MENU'] = '卡片管理',
+    ['TRADINGCARDS_MENU_CARD_RARITY'] = '稀有度:',
+    ['TRADINGCARDS_MENU_CARD_ATTACK'] = '攻擊:',
+    ['TRADINGCARDS_MENU_CARD_HP'] = '生命值:',
+    -- 商店
+    ['TRADINGCARDS_SHOP_TITLE'] = 'TCG商店',
+    -- 進度條
+    ['TRADINGCARDS_PROGRESS_TITLE'] = '正在開啟卡包...',
+    -- NUI 介面
+    ['TRADINGCARDS_NUI_GUIDE'] = '向下滑動卡包頂部打開...',
+    ['TRADINGCARDS_NUI_OPEN_INVENTORY'] = '打開庫存',
+    ['TRADINGCARDS_NUI_CLOSE_CARDS'] = '關閉',
+    ['TRADINGCARDS_NUI_PAGE_TEXT'] = '頁面',
+    ['TRADINGCARDS_NUI_PAGE_BACK'] = '下一頁',
+    ['TRADINGCARDS_NUI_PAGE_NEXT'] = '上一頁',
+    ['TRADINGCARDS_NUI_TAKE_CARD'] = '取出',
+    ['TRADINGCARDS_NUI_SHOW_CARD'] = '展示',
+    ['TRADINGCARDS_NOTIFICATION_ALBUM_FULL'] = '該相簿已滿，無法存放更多卡片',
+    ['TRADINGCARDS_NOTIFICATION_NO_ALBUM'] = '你的庫存中沒有相簿',
+    ['TRADINGCARDS_NOTIFICATION_NO_ADMIN'] = '你沒有權限使用此命令...',
+}
