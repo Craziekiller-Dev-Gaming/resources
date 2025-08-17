@@ -3,6 +3,21 @@
 ---------------------------------------------------------------
 if not wsb then return print((Strings.no_wsb):format(GetCurrentResourceName())) end
 
+function CheckJob(job, grade)
+    if not job then 
+        job = {}
+        for policeJob in pairs(Config.PoliceJobs) do
+            job[#job+1] = policeJob
+        end
+    end
+    local hasJob, playerGrade = wsb.hasGroup(job)
+    if not hasJob or not Config.PoliceJobs[hasJob] then return end
+    grade = grade or Config.PoliceJobs[hasJob]
+    if grade > playerGrade then return end
+    return hasJob, playerGrade
+end
+
+
 function CreateEvidenceMarker(evidence, coords, time)
     if evidence == 'blood' then
 ---@diagnostic disable-next-line: missing-parameter
@@ -59,6 +74,7 @@ function GetWeaponType(hash)
 end
 
 function SpawnBloodSplat(coords)
+    print('Spawning blood evidence', coords)
     local ped = cache.ped
     local hash = `p_bloodsplat_s`
     lib.requestModel('p_bloodsplat_s', 100)
@@ -110,7 +126,7 @@ function ScanForPrints()
             TriggerEvent('wasabi_bridge:notify', Strings.max_evidence, Strings.max_evidence_desc, 'error')
             return
         end
-        local data = lib.callback.await('wasabi_evidence:getPrintInfo', 100, PreviousDriver)
+        local data = lib.callback.await('wasabi_evidence:getPrintInfo', false, PreviousDriver)
         data.coords = GetEntityCoords(cache.ped)
         data.street = GetLocationInfo(data.coords)
         data.plate = GetVehicleNumberPlateText(vehicle)
@@ -144,7 +160,7 @@ function PickupEvidence(data)
             TriggerEvent('wasabi_bridge:notify', Strings.evidence_picked_up, (Strings.evidence_picked_up_desc):format(#EvidenceInHand, Config.MaxEvidence), 'success')
         elseif Config.CriminalsCanCleanEvidence.enabled then
             if data.evidence == 'blood' then
-                local cleaned = lib.callback.await('wasabi_evidence:hasCleaner', 100)
+                local cleaned = lib.callback.await('wasabi_evidence:hasCleaner', false)
                 if cleaned then
                     RemoveEvidence(data.id, data.coords)
                     EvidenceInHand[#EvidenceInHand + 1] = data
@@ -172,7 +188,7 @@ function OpenAddToDatabase(closestPlayer, identifier)
         elseif not input[1] or not input[2] then
             TriggerEvent('wasabi_bridge:notify', Strings.invalid_print_data, Strings.invalid_print_data_desc, 'error')
         else
-            local added = lib.callback.await('wasabi_evidence:manualFingerprintPlayerModify', 250, closestPlayer, input[1], input[2], identifier)
+            local added = lib.callback.await('wasabi_evidence:manualFingerprintPlayerModify', false, closestPlayer, input[1], input[2], identifier)
             if added then
               TriggerEvent('wasabi_bridge:notify', Strings.prints_recorded, Strings.prints_recorded_desc, 'success')
             end
@@ -223,7 +239,7 @@ function AnalyzeEvidence()
         }) then
             for i=1, #EvidenceInHand do
                 if EvidenceInHand[i] ~= nil then
-                    local d = lib.callback.await('wasabi_evidence:saveEvidence', 100, EvidenceInHand[i])
+                    local d = lib.callback.await('wasabi_evidence:saveEvidence', false, EvidenceInHand[i])
                     if d then
                         data[#data + 1] = d
                     end
@@ -245,7 +261,7 @@ end
 
 function AccessEvidenceStorage()
     local options = {}
-    local evidence, fingerprints = lib.callback.await('wasabi_evidence:getEvidenceStorage', 100)
+    local evidence, fingerprints = lib.callback.await('wasabi_evidence:getEvidenceStorage', false)
     if evidence and #evidence > 0 then
         if fingerprints then
             for k,v in pairs(evidence) do
@@ -311,10 +327,10 @@ function FingerprintNearbyPlayer(data)
                 scenario = 'WORLD_HUMAN_CLIPBOARD',
             },
         }) then
-            local matchingPrints = lib.callback.await('wasabi_evidence:fingerprintPlayer', 250, GetPlayerServerId(closestPlayer))
+            local matchingPrints = lib.callback.await('wasabi_evidence:fingerprintPlayer', false, GetPlayerServerId(closestPlayer))
             local matchingManualPrint
             if Config.ManualFingerprintDatabase then
-                matchingManualPrint = lib.callback.await('wasabi_evidence:manualFingerprintPlayer', 250, GetPlayerServerId(closestPlayer), false)
+                matchingManualPrint = lib.callback.await('wasabi_evidence:manualFingerprintPlayer', false, GetPlayerServerId(closestPlayer), false)
             end
             options = {}
             if not matchingManualPrint and Config.ManualFingerprintDatabase then
@@ -364,7 +380,7 @@ function FingerprintNearbyPlayer(data)
     else
         local matchingManualPrint
         if Config.ManualFingerprintDatabase and data[1] then
-            matchingManualPrint = lib.callback.await('wasabi_evidence:manualFingerprintPlayer', 250, false, data[1].identifier)
+            matchingManualPrint = lib.callback.await('wasabi_evidence:manualFingerprintPlayer', false, false, data[1].identifier)
         end
         if Config.ManualFingerprintDatabase and matchingManualPrint then
           options[#options + 1] = {

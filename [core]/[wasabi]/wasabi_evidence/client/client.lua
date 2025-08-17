@@ -12,10 +12,16 @@ if wsb.framework == 'qb' then
 end
 
 -- Events
+
+RegisterNetEvent('wasabi_bridge:onPlayerLoaded', function()
+    while not wsb or (wsb and not wsb.playerLoaded) or (wsb and not wsb.playerData) do Wait(1000) end
+    IsPolice = CheckJob()
+end)
+
+
 RegisterNetEvent('wasabi_bridge:setJob', function(job)
-    if not Config.PoliceJobs[job.name] then IsPolice = false return end
-    local _job, grade = wsb.hasGroup(job.name)
-    if _job and grade >= Config.PoliceJobs[job.name] then IsPolice = true end
+    if not job and job.name then return end
+    IsPolice = CheckJob(job.name)
 end)
 
 RegisterNetEvent('wasabi_evidence:deleteEvidence', function(id)
@@ -26,7 +32,7 @@ RegisterNetEvent('wasabi_evidence:deleteEvidence', function(id)
         cancel = true
     })
     if alert == 'confirm' then
-        if lib.callback.await('wasabi_evidence:deleteEvidence', 100, id) then
+        if lib.callback.await('wasabi_evidence:deleteEvidence', false, id) then
             TriggerEvent('wasabi_bridge:notify', Strings.evidence_deleted, (Strings.evidence_deleted_desc):format(id), 'success')
         else
             TriggerEvent('wasabi_bridge:notify', Strings.error, (Strings.evidence_not_deleted_desc):format(id), 'error')
@@ -103,6 +109,12 @@ if wsb.framework == 'qb' then
     end)
 end
 
+CreateThread(function()
+    while not wsb or (wsb and not wsb.playerLoaded) or (wsb and not wsb.playerData) do Wait(1000) end
+    IsPolice = CheckJob()
+end)
+
+
 -- Main Thread
 CreateThread(function()
     while not wsb?.playerData?.job do Wait(500) end
@@ -119,7 +131,7 @@ CreateThread(function()
     CreateThread(function()
         while true do
             local sleep = 2000
-            local ped = PlayerPedId()
+            local ped = cache.ped
             local coords = GetEntityCoords(ped)
             if HasEntityBeenDamagedByAnyPed(ped) and not IsLastHitBlacklisted() then
                 local street = GetLocationInfo(coords)
@@ -170,16 +182,13 @@ CreateThread(function()
             local coords = GetEntityCoords(ped)
             local authorized = false
             if not Config.CriminalsCanCleanEvidence.enabled then
-                for k,v in pairs(Config.PoliceJobs) do
-                    local job, grade = wsb.hasGroup(k)
-                    if job and grade and grade >= v then authorized = true break end
-                end
+                authorized = IsPolice
             else
                 authorized = true
             end
-            if authorized and IsPlayerFreeAiming(PlayerId()) and GetSelectedPedWeapon(ped) == `WEAPON_FLASHLIGHT` then
+            if authorized and IsPlayerFreeAiming(cache.playerId) and cache.weapon == `WEAPON_FLASHLIGHT` then
                 if sync then
-                    nearbyEvidence = lib.callback.await('wasabi_evidence:getNearbyEvidence', 100, coords, GetInteriorFromEntity(ped))
+                    nearbyEvidence = lib.callback.await('wasabi_evidence:getNearbyEvidence', false, coords, GetInteriorFromEntity(ped))
                     sync = false
                 end
                 if nearbyEvidence and #nearbyEvidence > 0 then
@@ -218,7 +227,7 @@ CreateThread(function()
                         end
                     end
                 end
-            elseif authorized and not IsPlayerFreeAiming(PlayerId()) then
+            elseif authorized and not IsPlayerFreeAiming(cache.playerId) then
                 if textUI then textUI = nil wsb.hideTextUI() end
                 sync = true
             end
@@ -401,7 +410,7 @@ end)
 
 lib.onCache('vehicle', function(vehicle)
     local track = true
-    local currentHand = GetPedDrawableVariation(PlayerPedId(), 3)
+    local currentHand = GetPedDrawableVariation(cache.ped, 3)
     if Hands then
         for i=1, #Hands do
             if Hands[i] == currentHand then
@@ -418,7 +427,7 @@ lib.onCache('vehicle', function(vehicle)
         end
     end
     if vehicle then
-        PreviousDriver = lib.callback.await('wasabi_evidence:checkLastDriver', 100, VehToNet(vehicle), (track or false))
+        PreviousDriver = lib.callback.await('wasabi_evidence:checkLastDriver', false, VehToNet(vehicle), (track or false))
     else
         PreviousDriver = nil
     end
