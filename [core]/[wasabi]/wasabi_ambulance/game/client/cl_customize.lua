@@ -608,3 +608,26 @@ function InteractBag()
 		TriggerEvent('wasabi_bridge:notify', Strings.not_medic, Strings.not_medic_desc, 'error')
 	end
 end
+
+if Config.CheckIfJailed.enabled then
+	function isPlayerInJail() -- checks if the player respawning is in jail or a prisoner or whatever you call it :>
+		if not Config.CheckIfJailed.resource then return end -- if the resource is not set, return false
+		local inJail = {
+			['wasabi_police'] = function() return LocalPlayer.state.injail end,
+			['qb-prison'] = function()
+				local qb = wsb.getCore()
+				if not qb then return false end
+				local jailTime = qb.Functions.GetPlayerData().metadata.injail
+				return jailTime and jailTime > 0 or false
+			end,
+			['rcore_prison'] = function() return exports['rcore_prison']:IsPrisoner() end,
+			['tk_jail'] = function() return exports.tk_jail:getSentence(wsb.cache.ped) > 0 end,
+			['r_prison'] = function() return exports.r_prison:IsInmate() or exports.r_prison:IsInmateLockdown() end
+			-- add your own jail resource here with their own check, please make sure to follow the format above
+		}
+	
+		local resource = Config.CheckIfJailed.resource
+		if not GetResourceState(resource) == 'started' then return false end -- if the resource is not started, return false
+		return inJail[resource] and inJail[resource]() or false -- if the resource is not in the table, return false
+	end
+end

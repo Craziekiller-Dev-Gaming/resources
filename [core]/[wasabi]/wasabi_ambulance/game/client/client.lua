@@ -202,6 +202,12 @@ end)
 
 RegisterNetEvent('wasabi_ambulance:setEMSOnline', function(ems)
     EMSAvailable = ems
+    SendNUIMessage({
+        action = 'updateEmsOnline',
+        emsOnline = EMSAvailable or 0,
+        translationStrings = UIStrings,
+        showCount = Config.ShowEMSCountOnDeath or false
+    })
 end)
 
 RegisterNetEvent('wasabi_bridge:playerLoaded', function()
@@ -262,8 +268,34 @@ RegisterNetEvent('wasabi_bridge:setJob', function(job)
             Authorized = true
         end
     end
-    if Config.UseRadialMenu then
-        AddRadialItems()
+    if wsb.framework == 'qb' then
+        local ambulanceJob = false
+        for _, jobType in ipairs(Config.ambulanceJobs) do
+            if job.name == jobType then
+                ambulanceJob = true
+                break
+            end
+        end
+
+        if ambulanceJob then
+            if Config.UseRadialMenu then
+                AddRadialItems()
+            end
+        else
+            if Config.UseRadialMenu then
+                RemoveRadialItems()
+            end
+        end
+        return
+    end
+    if wsb.isOnDuty() and wsb.hasGroup(Config.ambulanceJobs or Config.ambulanceJob) then
+        if Config.UseRadialMenu then
+            RemoveRadialItems()
+        end
+    else
+        if Config.UseRadialMenu then
+            AddRadialItems()
+        end
     end
 end)
 
@@ -416,6 +448,10 @@ AddEventHandler('wasabi_bridge:onPlayerDeath', function(data)
             end
         end
         if not foundInjury then deathInjury = CheckWeaponType(data.deathCause) end
+    end
+
+    if Config.UseRadialMenu then
+        DisableRadial(true)
     end
 
     PlayerInjury = {}
@@ -836,7 +872,7 @@ AddEventHandler('wasabi_ambulance:toggleDuty', function()
     if wsb.framework == 'qb' then
         wsb.playerData.job.onduty = not wsb.playerData.job.onduty
     end
-    TriggerServerEvent('wasabi_ambulance:svToggleDuty', job, grade)
+    TriggerServerEvent('wasabi_ambulance:svToggleDuty', false)
 end)
 
 AddEventHandler('wasabi_ambulance:accessStash', function()
@@ -932,7 +968,7 @@ CreateThread(function()
                                 end
                                 sleep = 0
                                 if IsControlJustReleased(0, 38) then
-                                    TriggerServerEvent('wasabi_ambulance:svToggleDuty', jobName, jobGrade)
+                                    TriggerServerEvent('wasabi_ambulance:svToggleDuty', k)
                                 end
                             elseif textUI then
                                 wsb.hideTextUI()
@@ -1439,6 +1475,7 @@ RegisterNetEvent('wasabi_ambulance:useBandage', function()
                 dict = 'missheistdockssetup1clipboard@idle_a',
                 clip = 'idle_a'
             },
+            color = Config.UIColor 
         }, progressUI) then
         local health = GetEntityHealth(wsb.cache.ped)
         health = (Config.Bandages.hpRegen * 2) + health
@@ -1526,6 +1563,9 @@ RegisterNetEvent('wasabi_ambulance:revivePlayer', function(serverdata)
         if not IsCheckedIn then
             ClearPedTasks(wsb.cache.ped)
         end
+        if Config.UseRadialMenu then
+            DisableRadial(false)
+        end
         Wait(1000)
         if not injury then return end
         ApplyDamageToPed(wsb.cache.ped, Config.ReviveHealth[injury], false)
@@ -1581,6 +1621,9 @@ RegisterNetEvent('wasabi_ambulance:revive', function(noAnim)
         TriggerServerEvent('hospital:server:resetHungerThirst') -- qb-ambulancejob compatibility
         TriggerServerEvent('hud:server:RelieveStress', 100)
         TriggerEvent('wasabi_bridge:onPlayerSpawn', (noAnim or false))
+    end
+    if Config.UseRadialMenu then
+        DisableRadial(false)
     end
     Wait(1000)
     if IsCheckedIn then return end
@@ -1762,22 +1805,27 @@ AddEventHandler('wasabi_ambulance:spawnVehicle', function(data)
 end)
 
 AddEventHandler('wasabi_ambulance:crutchMenu', function()
+    if isPlayerDead() then return end
     exports.wasabi_crutch:OpenCrutchMenu()
 end)
 
 AddEventHandler('wasabi_ambulance:crutchRemoveMenu', function()
+    if isPlayerDead() then return end
     exports.wasabi_crutch:OpenCrutchRemoveMenu()
 end)
 
 AddEventHandler('wasabi_ambulance:chairMenu', function()
+    if isPlayerDead() then return end
     exports.wasabi_crutch:OpenChairMenu()
 end)
 
 AddEventHandler('wasabi_ambulance:chairRemoveMenu', function()
+    if isPlayerDead() then return end
     exports.wasabi_crutch:OpenChairRemoveMenu()
 end)
 
 AddEventHandler('wasabi_ambulance:billPatient', function()
+    if isPlayerDead() then return end
     if wsb.hasGroup(Config.ambulanceJobs or Config.ambulanceJob) then
         local coords = GetEntityCoords(wsb.cache.ped)
         local player = wsb.getClosestPlayer(vec3(coords.x, coords.y, coords.z), 2.0)

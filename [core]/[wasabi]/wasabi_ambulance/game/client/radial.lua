@@ -5,21 +5,9 @@ if not wsb then return print((Strings.no_wsb):format(GetCurrentResourceName())) 
 if not Config.UseRadialMenu then return end
 
 function AddRadialItems()
+	Wait(100) -- Don't remove this, for some reason it's needed during job changes
 	if wsb.hasGroup(Config.ambulanceJobs or Config.ambulanceJob) then
-		if wsb.framework == 'qb' then
-			if wsb.playerData.job.onduty then
-				exports.ox_lib:addRadialItem({
-					{
-						id = 'ems_general',
-						label = 'EMS',
-						icon = 'ambulance',
-						menu = 'ems_menu'
-					},
-				})
-			else
-				exports.ox_lib:removeRadialItem('ems_general')
-			end
-		else
+		if wsb.isOnDuty() then
 			exports.ox_lib:addRadialItem({
 				{
 					id = 'ems_general',
@@ -28,10 +16,18 @@ function AddRadialItems()
 					menu = 'ems_menu'
 				},
 			})
-		end
-	else
-		exports.ox_lib:removeRadialItem('ems_general')
-	end
+        else
+           exports.ox_lib:removeRadialItem('ems_general')
+        end
+    end
+end
+
+function RemoveRadialItems()
+	exports.ox_lib:removeRadialItem('ems_general')
+end
+
+function DisableRadial(state)
+	exports.ox_lib:disableRadial(state)
 end
 
 exports.ox_lib:registerRadial({ -- EMS menu

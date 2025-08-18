@@ -9,7 +9,7 @@ lua54 'yes'
 
 description 'Wasabi ESX/QBCore Advanced Ambulance Job'
 author 'wasabirobby'
-version '1.11.9'
+version '1.12.6'
 
 ui_page 'nui/index.html'
 files { 'nui/*', 'nui/**/*' }
@@ -17,7 +17,7 @@ files { 'nui/*', 'nui/**/*' }
 data_file 'DLC_ITYP_REQUEST' 'stream/wasabi_stretcher.ytyp'
 
 client_scripts { 'game/client/*.lua' }
-server_scripts { '@mysql-async/lib/MySQL.lua', 'game/configuration/logs.lua', 'game/server/*.lua' }
+server_scripts { '@mysql-async/lib/MySQL.lua', 'game/configuration/logs.lua', 'game/configuration/weapons.lua', 'game/server/*.lua' }
 shared_scripts { 'game/configuration/config.lua', 'game/configuration/locales/*.lua', 'game/data.lua', '@wasabi_bridge/import.lua' }
 
 dependencies { 'wasabi_bridge' }

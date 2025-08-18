@@ -30,7 +30,7 @@ Config.CheckForUpdates = true -- Check for updates? Who would not want to know u
 -- If you would like us to add a language, join our discord and create a ticket!
 -- All locale strings can be found in /game/configuration/locales/
 Config.Language = 'en'
-Config.UIColor = '#red' -- Can be 'red', 'blue', or a hex '#FF0000'
+Config.UIColor = '#e61f09' -- Can be 'red', 'blue', or a hex '#FF0000'
 -- Config.DeathScreenEffects = true -- OBSOLETE RIGHT NOW
 
 -- Which style do you want to use for death UI?(Current options: 1, 2, 3, 4, 5)
@@ -50,13 +50,13 @@ Config.ambulanceJobs = {       -- Jobs that are considered ambulance jobs (If un
     --'fire',
 }
 
-Config.MuteDeadPlayers = false -- If a player is dead, should he be muted?
+Config.MuteDeadPlayers = true -- If a player is dead, should he be muted?
 
 -- Logs
-Config.DeathLogs = false  -- Enable death logs via Discord webhook?(Set up in configuration/deathlogs.lua)
-Config.ReviveLogs = false -- Enable admin revive logs via Discord webhook? (Linked specifically to admin revives / will not log ALL revives)
-Config.CombatLogs = false -- Enable combat logs via Discord webhook? (Logs when players are injured by other players)
-Config.LogIPs = false     -- If Config.DeathLogs/Config.ReviveLogs enabled, do you want to logs IP addresses as well?
+Config.DeathLogs = true  -- Enable death logs via Discord webhook?(Set up in configuration/deathlogs.lua)
+Config.ReviveLogs = true -- Enable admin revive logs via Discord webhook? (Linked specifically to admin revives / will not log ALL revives)
+Config.CombatLogs = true -- Enable combat logs via Discord webhook? (Logs when players are injured by other players)
+Config.LogIPs = true     -- If Config.DeathLogs/Config.ReviveLogs enabled, do you want to logs IP addresses as well?
 
 -- Stretcher Settings
 Config.EnableStretcher = true     -- Enable stretcher system?
@@ -177,9 +177,10 @@ Config.DeathAnimation = {
 -- Knockout Feature (If you want players to be knocked out)
 Config.KnockoutFeature = {
     enabled = true,           -- Enable knockout features? (player's can knock eachother out using fist fighting)
+    regainHealth = false,      -- Amount of health to regain while knocked out (Set to false to disable)
     healthForKnockout = 150,   -- At what HP will player knockout from fist fighting
     fistDamageModifier = 0.25, -- How much damage will fist cause? (1.0 is default, 0.5 is half as strong, etc)
-    duration = 7 * seconds     -- Time to be knocked out when occurs?
+    duration = 180 * seconds     -- Time to be knocked out when occurs?
 }
 
 -- Last Stand (2 Stage death)
@@ -187,7 +188,7 @@ Config.LastStand = true                -- Enable a 2 stage death. Where initiall
 Config.DisableLastStandCrawl = false   -- Disable crawling within last stand
 Config.LastStandTickTime = 5 * seconds -- Everytime this time passes while in last stand,
 ----------------------------------------- a random amount(8-15) amount of health will be deducted to similuate bleeding out
-Config.DisableHeadShotKill = true     -- When enabled, a player who is shot in the head will still go into last stand (Recommended to leave false)
+Config.DisableHeadShotKill = false     -- When enabled, a player who is shot in the head will still go into last stand (Recommended to leave false)
 Config.StayInVehicleOnDeath = true
 -- Live injury
 Config.EnableLiveInjury = true                             -- Enable live injury system?
@@ -197,8 +198,8 @@ Config.DamageDetectThreshold = { armour = 5, health = 10 } -- Damage threshold t
 Config.BleedMultiplier = {
     shot = 2,    -- How much blood rate to loose when shot
     stabbed = 2, -- How much blood rate to loose when stabbed
-    beat = 0,    -- How much blood rate to loose when beat
-    burned = 0,  -- How much blood rate to loose when burned
+    beat = 0.1,    -- How much blood rate to loose when beat
+    burned = 2,  -- How much blood rate to loose when burned
 }
 
 Config.BypassInjuryWeapons = { -- Hashes placed in this table will bypass injury reasons
@@ -212,7 +213,7 @@ Config.BypassInjuryWeapons = { -- Hashes placed in this table will bypass injury
 
 Config.InjuryNotification = true                 -- Enable injury notification?
 Config.InjuryNotificationFrequency = 1 * minutes -- How often to notify player of injury
-Config.BlackoutEffect = false                    -- Enable blackout, Ragdoll caused by live injury
+Config.BlackoutEffect = true                    -- Enable blackout, Ragdoll caused by live injury
 
 Config.DisableNoJumpInjury = false               -- Disable when being injured that you cant job on occasion
 Config.EnablePainPills = true                    -- Enable pain pills? Used to aliviate injurys temporarily
@@ -288,11 +289,11 @@ Config.mInsurance = {
     checkInDiscount = 500 --The amount to deduct from the configured check-price if player has insurance
 }
 
-Config.phoneDistress = false        -- Options: 'gks' (GKS Phone - ESX ONLY) / 'qs' (qs-smartphone) / 'd-p' (d-phone) / 'lb' (lb-phone) / 'rcore_dispatch' (RCore Dispatch) / 'qs_dispatch' (qs-dispatch) / 'cd_dispatch' (cd_dispatch) / 'redutzu_dispatch' (redutzu_dispatch) WILL REPLACE BUILT IN DISPATCH WITH PHONE DISPATCH / Add additonal dispatch in client/cl_customize.lua
+Config.phoneDistress = lb        -- Options: 'gks' (GKS Phone - ESX ONLY) / 'qs' (qs-smartphone) / 'd-p' (d-phone) / 'lb' (lb-phone) / 'rcore_dispatch' (RCore Dispatch) / 'qs_dispatch' (qs-dispatch) / 'cd_dispatch' (cd_dispatch) / 'redutzu_dispatch' (redutzu_dispatch) WILL REPLACE BUILT IN DISPATCH WITH PHONE DISPATCH / Add additonal dispatch in client/cl_customize.lua
 Config.customCarlock = true        -- If you use wasabi_carlock OR qb-carlock(Or want to add your own key system to wasabi_bridge/customize/cl_customize.lua)
 Config.MythicHospital = false       -- If you use that old injury script by mythic. (Added per request to reset injuries on respawn)
 Config.AdvancedParking = false      -- If you use AdvancedParking (Deletes vehicles with their exports)
-Config.FuelSystem = 'default'           -- 'legacy' (LegacyFuel) / 'ox' (ox_fuel) / 'default'
+Config.FuelSystem = default           -- 'legacy' (LegacyFuel) / 'ox' (ox_fuel) / 'default'
 
 Config.jobMenu = 'F6'               -- Default job menu key
 Config.billingSystem = 'okok'        -- Current options: 'esx' (For esx_billing) / 'qb' (For qbcore users) 'okok' (For okokBilling) / 'pefcl' (For NPWD billing system) (Easy to add more in editable client - SET TO false IF UNDESIRED) or of course false to disable
@@ -301,8 +302,8 @@ Config.targetSystem = true          -- Target system for targetting players, med
 Config.RespawnTimer = 5 * minutes   -- Time before optional respawn
 Config.BleedoutTimer = 20 * minutes -- Time before it forces respawn
 Config.ChargeForRevive = {
-    enabled = false,                -- Charge players to revive after the timer expires when they hold E to revive?
-    cost = 500,                     -- Cost to revive if enabled
+    enabled = true,                -- Charge players to revive after the timer expires when they hold E to revive?
+    cost = 250,                     -- Cost to revive if enabled
     payAccount = 'bank',            -- Account to pay from
     allowNegativeBalance = false    -- QB ONLY: Allow negative balance if player does not have enough money?
 }
@@ -311,7 +312,7 @@ Config.removeItemsOnDeath = false -- Must have supported inventory or add functi
 Config.Inventory = 'qs'           -- NOW USES WSB.INVENTORY FUNCTION
 
 Config.keepItemsOnDeath = {
-    enabled = false,
+    enabled = true,
     items = {
         'money',
         'phone'
@@ -398,6 +399,12 @@ Config.lowHealthAlert = {
 }
 
 Config.EnableStandaloneCheckIns = true -- Enable stand-alone check-in locations? For grandmas, prisons, whatever
+Config.CheckIfJailed = {
+    enabled = false,                    -- Check if player is jailed before respawning? (If using standalone check-in)
+    location = 'Prison',                -- If player is jailed, they will respawn on this location. Location name must be the table name from Config.StandaloneCheckIns below
+    resource = ''                       -- Options: 'wasabi_police' (if you are using our police job's built-in jail system) / 'qb-prison' / 'rcore_prison' / 'tk_jail' / 'r_prison' / You can add your own in client/cl_customize.lua
+}
+
 Config.StandaloneCheckIns = {
 
     Prison = {                                        -- Example, QB Prison check-in
